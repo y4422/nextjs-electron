@@ -12,7 +12,7 @@
 
 # electron
 /dist/
-/app/
+# /app/ この行を削除または次のようにコメントアウト
 
 # production
 /build

@@ -5,6 +5,12 @@ interface ElectronAPI {
     getAppVersion: () => string | undefined;
     on: (channel: string, callback: (...args: any[]) => void) => void;
     send: (channel: string, data: any) => void;
+    apiRequest: {
+        hello: {
+            get: () => Promise<any>;
+            post: (data: any) => Promise<any>;
+        }
+    };
 }
 
 // 安全なAPIをレンダラープロセスに公開
@@ -27,6 +33,14 @@ contextBridge.exposeInMainWorld("electronAPI", {
         const validChannels: string[] = ["message-to-main"];
         if (validChannels.includes(channel)) {
             ipcRenderer.send(channel, data);
+        }
+    },
+
+    // API リクエスト
+    apiRequest: {
+        hello: {
+            get: () => ipcRenderer.invoke('api:hello:get'),
+            post: (data: any) => ipcRenderer.invoke('api:hello:post', data)
         }
     }
 } as ElectronAPI); 

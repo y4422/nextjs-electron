@@ -1,5 +1,5 @@
 // Electronメインプロセスファイル
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain, protocol, net } from 'electron';
 import * as path from 'path';
 import * as url from 'url';
 import * as fs from 'fs';
@@ -82,7 +82,48 @@ function createWindow(): void {
 // アプリの起動処理
 app.whenReady().then(() => {
     createWindow();
+    setupApiHandlers();
 });
+
+// APIハンドラーのセットアップ
+function setupApiHandlers() {
+    // HelloAPIのGETハンドラー
+    ipcMain.handle('api:hello:get', async () => {
+        try {
+            return {
+                message: 'こんにちは！APIが正常に動作しています',
+                timestamp: new Date().toISOString(),
+                status: 'success'
+            };
+        } catch (error) {
+            console.error('API GET error:', error);
+            return {
+                message: 'エラーが発生しました',
+                error: (error as Error).message,
+                status: 'error'
+            };
+        }
+    });
+
+    // HelloAPIのPOSTハンドラー
+    ipcMain.handle('api:hello:post', async (_event, data) => {
+        try {
+            return {
+                message: 'POSTリクエストを受け取りました',
+                receivedData: data,
+                timestamp: new Date().toISOString(),
+                status: 'success'
+            };
+        } catch (error) {
+            console.error('API POST error:', error);
+            return {
+                message: 'エラーが発生しました',
+                error: (error as Error).message,
+                status: 'error'
+            };
+        }
+    });
+}
 
 // すべてのウィンドウが閉じられたときの処理
 app.on('window-all-closed', () => {

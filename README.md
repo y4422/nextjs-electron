@@ -11,6 +11,7 @@ Next.jsのApp RouterとTailwind CSSを使用した、モダンでシンプルな
 - モダンなUI設計
 - レスポンシブデザイン
 - マルチアーキテクチャ対応（ARM64, x64）
+- API機能とテストツール
 
 ## インストール
 
@@ -57,16 +58,70 @@ npm run pack
 
 ビルドされたアプリは `dist` ディレクトリに出力されます。ファイル名には対象のアーキテクチャ情報が含まれます。
 
+## API機能
+
+このアプリケーションには、Next.jsのAPI RoutesとElectronのIPC通信を利用したAPIテスト機能が含まれています。
+開発環境とビルド後の実行環境の両方でAPIをテストできるようになっています。
+
+### APIエンドポイント
+
+#### GET /api/hello
+
+シンプルなGET APIエンドポイントで、以下のようなレスポンスを返します：
+
+```json
+{
+  "message": "こんにちは！APIが正常に動作しています",
+  "timestamp": "2023-06-01T12:34:56.789Z",
+  "status": "success"
+}
+```
+
+#### POST /api/hello
+
+リクエストボディを受け取って、そのデータと一緒にレスポンスを返します：
+
+```json
+{
+  "message": "POSTリクエストを受け取りました",
+  "receivedData": {
+    "key": "value"
+  },
+  "timestamp": "2023-06-01T12:34:56.789Z",
+  "status": "success"
+}
+```
+
+### APIテストツール
+
+アプリケーションには、APIをテストするための専用UIコンポーネントが含まれています：
+
+- **GET APIテスト**: GETリクエストでAPIを呼び出し、レスポンスを表示します
+- **POST APIテスト**: JSONデータをPOSTリクエストで送信し、レスポンスを表示します
+
+#### Electron環境での動作
+
+Electronアプリケーションでは、パッケージ化された環境でもAPIが動作するよう、IPC通信を使用してAPIリクエストを処理しています。
+アプリケーションは実行環境を自動的に検出し、適切な方法でAPIリクエストを処理します：
+
+- ブラウザ環境: 通常のfetch APIを使用してNext.jsのAPIルートにアクセス
+- Electron環境: IPC通信を使用してメインプロセスと通信
+
 ## プロジェクト構造
 
 - `app/` - Next.js App Router
   - `components/` - Reactコンポーネント
     - `Calculator.tsx` - 電卓の主要コンポーネント
+    - `ApiTest.tsx` - APIテスト用コンポーネント
+  - `api/` - Next.js API Routes
+    - `hello/` - サンプルAPI
+      - `route.ts` - APIハンドラー
   - `globals.css` - グローバルスタイル
   - `layout.tsx` - レイアウトコンポーネント
   - `page.tsx` - メインページ
-- `main.ts` - Electronのメインプロセスファイル
-- `preload.ts` - Electronプリロードスクリプト
+- `main.ts` - Electronのメインプロセスファイル（APIハンドラーを含む）
+- `preload.ts` - Electronプリロードスクリプト（IPC通信の橋渡し）
+- `electron.d.ts` - Electron用の型定義
 - `resources/` - ビルドリソース
 - `tsconfig.json` - Next.js用TypeScript設定
 - `tsconfig.electron.json` - Electron用TypeScript設定
@@ -87,6 +142,7 @@ npm run pack
 - 正負切り替え
 - 小数点対応
 - クリア機能
+- APIテスト機能（GET/POST）
 
 ## ライセンス
 

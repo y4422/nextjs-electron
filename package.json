@@ -2,29 +2,18 @@
   "name": "nextjs-electron",
   "version": "1.0.0",
   "description": "Electron + Next.js 電卓アプリ",
-  "main": "main.js",
+  "main": "dist/main.js",
   "scripts": {
-    "dev": "concurrently -n \"NEXT,ELECTRON\" -c \"yellow,blue\" --kill-others \"next dev\" \"electron .\"",
-    "build": "next build && electron-builder",
+    "dev": "concurrently -n \"NEXT,ELECTRON\" -c \"yellow,blue\" --kill-others \"next dev\" \"npm run electron:dev\"",
+    "electron:dev": "tsc -p tsconfig.electron.json && electron .",
+    "build": "next build && tsc -p tsconfig.electron.json && electron-builder --dir",
+    "build:all": "next build && tsc -p tsconfig.electron.json && electron-builder --mac --win --linux",
+    "build:mac": "next build && tsc -p tsconfig.electron.json && electron-builder --mac",
+    "build:win": "next build && tsc -p tsconfig.electron.json && electron-builder --win",
+    "build:linux": "next build && tsc -p tsconfig.electron.json && electron-builder --linux",
     "start": "next start",
-    "pack": "electron-builder --dir"
-  },
-  "build": {
-    "appId": "com.example.nextjs-electron",
-    "productName": "Calculator App",
-    "mac": {
-      "category": "public.app-category.utilities"
-    },
-    "files": [
-      "**/*",
-      "!**/.vscode/*",
-      "!**/.git/*",
-      "!**/node_modules/*"
-    ],
-    "directories": {
-      "buildResources": "resources",
-      "output": "dist"
-    }
+    "pack": "electron-builder --dir",
+    "type-check": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
@@ -44,6 +33,10 @@
   "devDependencies": {
     "electron": "^22.3.27",
     "electron-builder": "^26.0.12",
-    "wait-on": "^8.0.3"
+    "wait-on": "^8.0.3",
+    "typescript": "^5.5.3",
+    "@types/react": "^18.2.0",
+    "@types/react-dom": "^18.2.0",
+    "@types/node": "^20.14.0"
   }
 }

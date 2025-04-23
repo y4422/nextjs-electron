@@ -3,19 +3,49 @@ productName: "Calculator App"
 copyright: "Copyright (c) 2024"
 directories:
   output: "dist"
+  buildResources: "resources"
 files:
+  - "dist/**/*"
   - "out/**/*"
-  - "main.js"
-  - "preload.js"
   - "node_modules/**/*"
   - "package.json"
-asar: false
+  - "!**/.vscode/*"
+  - "!**/.git/*"
+  - "!**/node_modules/.bin/*"
+  - "!**/node_modules/.cache/*"
+asar: true
+extraResources:
+  - from: "out"
+    to: "out"
+
+# macOS設定
 mac:
-  target: ["dmg"]
-# Build for both architectures
-electronDownload:
-  arch: "x64"
+  category: "public.app-category.utilities"
+  target: 
+    - target: "dmg"
+      arch: 
+        - "x64"
+        - "arm64"
+    - target: "zip"
+      arch: 
+        - "x64"
+        - "arm64"
+  artifactName: "${productName}-${version}-${arch}.${ext}"
+
+# Windows設定
 win:
-  target: ["portable"]
+  target: 
+    - target: "portable"
+      arch: 
+        - "x64"
+        - "ia32"
+  artifactName: "${productName}-${version}-${arch}.${ext}"
+
+# Linux設定
 linux:
-  target: ["AppImage"] 
+  target: 
+    - target: "AppImage"
+      arch: 
+        - "x64"
+        - "arm64"
+  artifactName: "${productName}-${version}-${arch}.${ext}" 

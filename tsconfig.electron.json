@@ -1,0 +1,25 @@
+{
+    "compilerOptions": {
+        "target": "es2018",
+        "module": "commonjs",
+        "outDir": "dist",
+        "rootDir": ".",
+        "strict": true,
+        "moduleResolution": "node",
+        "esModuleInterop": true,
+        "skipLibCheck": true,
+        "forceConsistentCasingInFileNames": true,
+        "sourceMap": true
+    },
+    "include": [
+        "main.ts",
+        "preload.ts",
+        "electron.d.ts"
+    ],
+    "exclude": [
+        "node_modules",
+        "dist",
+        "out",
+        "app"
+    ]
+}

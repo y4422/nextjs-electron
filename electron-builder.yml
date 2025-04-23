@@ -1,0 +1,21 @@
+appId: "com.example.electron-next-calculator"
+productName: "Calculator App"
+copyright: "Copyright (c) 2024"
+directories:
+  output: "dist"
+files:
+  - "out/**/*"
+  - "main.js"
+  - "preload.js"
+  - "node_modules/**/*"
+  - "package.json"
+asar: false
+mac:
+  target: ["dmg"]
+# Build for both architectures
+electronDownload:
+  arch: "x64"
+win:
+  target: ["portable"]
+linux:
+  target: ["AppImage"] 
